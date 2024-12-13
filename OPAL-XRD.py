@@ -67,39 +67,33 @@ _______________________________________________
 """
 
 ##### XRD SPECIFIC USER DEFINED PARAMETERS #####
-BAT_ID         = "CA-SnHC80-PW_10mA-2"             ### Change ###
-XRD_FOLDER      = r"C:\Users\amalieas\OneDrive - Universitetet i Oslo\01_PhD\Experimental\WMG\CA-SnHC80-PW_10mA-2\xy files" ### Change ###
-XRD_FILETYPE    = "xy"              ### Change ###  # supported filetypes are "xye" (synchrotron) and "xy" (home-lab)
-WAVELENGTH      = 0.7093           ### Change ###  # value: home lab: 0.7093 Å, BM31 Jun23: 0.24468, BM31 Nov22: 0.31916, BM01 Nov22: 0.60456
-CONVERT_TO_Q    = True               ### Change ###  # do you want to convert 2th into Q?
-DIFFERENTIAL_XRD = False             ### Change ###  # do you want to display the data as differential XRDs? 1st scan subtracted from each scan.
-NORMALIZE        = False                 ### Change ### # do you want to normalize hte intensity of the collected data? If you have large fluctuations, it makes sense.
-ELCHEM_TYPE      = "GC"                 ### "CV", or "GC", default is GC
-TIME_ON_Y        = True                ### Change ### do you want time on the y-axis for both op and ew plot?
+BAT_ID         = "BATTERY ID"       ### Change ###
+XRD_FOLDER      = r"YOUR FOLDER"    ### Change ###
+XRD_FILETYPE    = "xy"              ### Change ###  # supported filetypes are "xye" (synchrotron), "dat" (BM01), and "xy" (home-lab)
+WAVELENGTH      = 0.7093            ### Change ###  # value: home lab: 0.7093 Å, BM31 Jun23: 0.24468, BM31 Nov22: 0.31916, BM01 Nov22: 0.60456
+CONVERT_TO_Q    = True              ### Change ###  # do you want to convert 2th into Q?
+DIFFERENTIAL_XRD = False            ### Change ###  # do you want to display the data as differential XRDs? 1st scan subtracted from each scan.
+NORMALIZE        = False            ### Change ###  # do you want to normalize hte intensity of the collected data? If you have large fluctuations, it makes sense.
+ELCHEM_TYPE      = "GC"             ### Change ###  # "CV", or "GC", default is GC
+TIME_ON_Y        = True             ### Change ###  #do you want time on the y-axis for both op and ew plot?
 
 
 ##### GC SPECIFIC USER DEFINED PARAMETERS #####
-#GC_FILEPATH     = r"C:\Users\amalieas\OneDrive - Universitetet i Oslo\01_PhD\Experimental\02_Operando_XRD\test"  ### Change ###
-GC_FILE         = r"C:\Users\amalieas\OneDrive - Universitetet i Oslo\01_PhD\Experimental\WMG\CA-SnHC80-PW_10mA-2\SnHC80-PW-10mA-2_C01.mpt"                                        ### Change ###   # mandatory to include the extention, e.g. ".mpt" or ".txt"
-ION             = "Na"                                                                                          ### Change ###
-MIN_POTENTIAL   = 1.3
-MAX_POTENTIAL   = 3.8
-CALCULATE_xNa = False
+GC_FILE         = r"GC FOLDER\GC-ILE.mpt"         ### Change ### # mandatory to include the extention, e.g. ".mpt" or ".txt"
+ION             = "Na"              							### Change ### # e.g., "Li", "Na", "K"
+MIN_POTENTIAL   = 1.3															### Change ###
+MAX_POTENTIAL   = 3.8															### Change ###
 
 
 ### Defining colors for the countor plot. More colormaps available through: https://matplotlib.org/stable/users/explain/colors/colormaps.html
 colormap = 'twilight_shifted'
 
-### You can also make your own colormap (below is Amalie's BARBIE-colormap):
-#pink_colors = ["#6300CC", "#9D3CFF", "#BA75FF", "#D8B0FF", "#E9D4FF", "#F6D4FF", "#EEACFF", "#E26FFF", "#D631FF", "#A700D1"]
-#colormap = LinearSegmentedColormap.from_list("pink colormap", pink_colors) # Creates a colormap from the palette
-
 
 ##### PLOT SPECIFIC USER DEFINED PARAMETERS #####   
 MIN_INTENSITY   = 0          ### Change ###  # lower limit intensity in operando contour figure (related to intensity in XRD, but not necessarily the lowest observed intensity)
 MAX_INTENSITY   = 10         ### Change ###  # higher limit intensity in operando contour figure (related to intensity in XRD, but not necessarily the highest observed intensity)
-CBARNUM         = 1000         ### Change ###  # number of distinct colors, aka detail. Change numebr as a fucntion of levels between MIN_I and MAX_I (play with it)
-COUNT           = 3             ### Change ###  # number of runs, change if you would like to not overwrite the last plot generated
+CBARNUM         = 1000       ### Change ###  # number of distinct colors, aka detail. Change numebr as a fucntion of levels between MIN_I and MAX_I (play with it)
+COUNT           = 1          ### Change ###  # number of runs, change if you would like to not overwrite the last plot generated
 
 
 ### x-axis specific limits, do not need to change for home-lab data ###
@@ -144,13 +138,6 @@ def format_GC(gc_file):
     capacity = []
     
     GC_DATATYPE = GC_datatype(gc_file)
-    # if gc_file.endswith('.mpt'):
-    #     GC_DATATYPE = 'Biologic'
-    # elif gc_file.endswith('.txt'):
-    #     GC_DATATYPE = 'BatSmall'
-    # else:
-    #     GC_DATATYPE = 'Undefined'
-   
     print(f"The GC data is from {GC_DATATYPE}")
 
     if GC_DATATYPE == 'Biologic':
@@ -184,23 +171,6 @@ def format_GC(gc_file):
     elif GC_DATATYPE == 'Undefined':
         raise Exception(f"GC file dataformat is {GC_DATATYPE} and not supported by this script. Please check if you have made a mistake")
 
-
-    #### To come: express the GC as a function of number of Na ions ### ( it works for now only for Biologic)    
-    # active_mass = 1.26  #mg
-    # molecular_weight = 480.4 #g/mol
-    # faraday_constant = 26.8  #Ah/mol
-    # specific_capacity = capacity / (active_mass / 1000)
-
-    # if CALCULATE_xNa == True:
-    #     for c in capacity:
-    #         specific_capacity = c / (active_mass / 1000)
-    #         num_Na = (molecular_weight * (specific_capacity / 1000)) / faraday_constant
-        
-    #     GC_array[:, 2] = (((GC_array[:, 2] / (active_mass / 1000)) / 1000) * molecular_weight) / faraday_constant
-
-
-    # np.savetxt(fr"{DEST_FOLDER}\{BAT_ID}_gc.txt", GC_array) 
-    # print(f"The GC-file '{BAT_ID}_gc.txt' was saved...")
 
 
 def format_CV(gc_file):
@@ -259,7 +229,6 @@ if __name__ == "__main__":
     n_files = len(XRD_FILES)
     print("Number of input files: ", n_files)
 
-    
     
     # Loading all XRD files into a pandas DataFrame (i.e. Excel for Python)
     df = pd.DataFrame()
